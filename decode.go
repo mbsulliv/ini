@@ -62,7 +62,7 @@ func (e DecodeError) Error() string {
 // the field's value is set to nil if no such key name is found in the
 // INI-encoded data.
 func Unmarshal(data []byte, v interface{}) error {
-	return unmarshal(data, v, Options{})
+	return unmarshal(data, v, Options{AllowSpaceAroundEqual: true})
 }
 
 // UnmarshalWithOptions allows parsing behavior to be configured with an Options
@@ -77,6 +77,7 @@ func unmarshal(data []byte, v interface{}, opts Options) error {
 	p.l.opts.allowMultilineWhitespacePrefix = opts.AllowMultilineValues
 	p.l.opts.allowNumberSignComments = opts.AllowNumberSignComments
 	p.l.opts.allowEmptyValues = opts.AllowEmptyValues
+	p.l.opts.allowSpaceAroundEqual = opts.AllowSpaceAroundEqual
 	if err := p.parse(); err != nil {
 		return err
 	}

@@ -56,6 +56,7 @@ type lexerOptions struct {
 	allowMultilineWhitespacePrefix bool // support space-prefixed lines
 	allowEmptyValues               bool // accept empty values as valid
 	allowNumberSignComments        bool // treat lines beginning with the number sign (#) as a comment
+	allowSpaceAroundEqual          bool // accept spaces around equals in property assignments
 }
 
 type lexer struct {
@@ -224,6 +225,9 @@ func lexPropKey(l *lexer) stateFunc {
 			return l.error(&unexpectedCharErr{r, "a property key must be followed by the assignment character ('=')"})
 		}
 		if r == assignment || r == mapKeyStart {
+			if (l.rpeek() == space) && (l.opts.allowSpaceAroundEqual) {
+				r = l.prev() // Don't include the extra space in the token.
+			}
 			break
 		}
 		l.next()
@@ -256,7 +260,12 @@ func lexMapKey(l *lexer) stateFunc {
 }
 
 func lexAssignment(l *lexer) stateFunc {
-	r := l.next()
+	r := l.peek()
+	if (r == space) && (l.opts.allowSpaceAroundEqual) {
+		l.next()
+		l.ignore() // Skip space before equals.
+	}
+	r = l.next()
 	if r != assignment {
 		panic("lexer: invalid state encountered")
 	}
@@ -265,7 +274,11 @@ func lexAssignment(l *lexer) stateFunc {
 }
 
 func lexPropValue(l *lexer) stateFunc {
-	var r rune
+	r := l.peek()
+	if (r == space) && (l.opts.allowSpaceAroundEqual) {
+		l.next()
+		l.ignore() // Skip space before equals.
+	}
 	for {
 		r = l.peek()
 		if r == eol || r == eof {

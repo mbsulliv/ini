@@ -46,17 +46,17 @@ func ExampleMarshal() {
 	}
 	_, _ = os.Stdout.Write(b)
 	// Output:
-	// Version=1.2.3
+	// Version = 1.2.3
 	//
 	// [Owner]
-	// Name=John Doe
-	// Organization=Acme Widgets Inc.
+	// Name = John Doe
+	// Organization = Acme Widgets Inc.
 	//
 	// [Database]
-	// Server=192.0.2.62
-	// Port=143
-	// File=payroll.dat
-	// Path[unix]=/var/db
+	// Server = 192.0.2.62
+	// Port = 143
+	// File = payroll.dat
+	// Path[unix] = /var/db
 }
 
 func ExampleUnmarshal() {
@@ -80,18 +80,18 @@ func ExampleUnmarshal() {
 
 	var config Config
 
-	data := []byte(`Version=1.2.3
+	data := []byte(`Version = 1.2.3
 
 	[Owner]
-	Name=John Doe
-	Organization=Acme Widgets Inc.
+	Name = John Doe
+	Organization = Acme Widgets Inc.
 
 	[Database]
-	Server=192.0.2.62
-	Port=143
-	File=payroll.dat
-	Path[unix]=/var/db
-	Path[win32]=C:\db`)
+	Server = 192.0.2.62
+	Port = 143
+	File = payroll.dat
+	Path[unix] = /var/db
+	Path[win32] = C:\db`)
 
 	if err := ini.Unmarshal(data, &config); err != nil {
 		fmt.Println("error:", err)

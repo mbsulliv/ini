@@ -15,4 +15,8 @@ type Options struct {
 
 	// AllowEmptyValues permits a key to have an empty assignment.
 	AllowEmptyValues bool
+
+	// Allow a single additional space around equals in property assignment.
+	// Defaults to true.
+	AllowSpaceAroundEqual bool
 }

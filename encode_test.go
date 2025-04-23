@@ -35,7 +35,7 @@ func TestEncodeProperty(t *testing.T) {
 				key string
 				val interface{}
 			}{"k", "0"},
-			want: bytes.NewBufferString("k=0\n"),
+			want: bytes.NewBufferString("k = 0\n"),
 		},
 		{
 			desc: "encode int",
@@ -43,7 +43,7 @@ func TestEncodeProperty(t *testing.T) {
 				key string
 				val interface{}
 			}{"k", 1},
-			want: bytes.NewBufferString("k=1\n"),
+			want: bytes.NewBufferString("k = 1\n"),
 		},
 		{
 			desc: "encode float",
@@ -51,7 +51,7 @@ func TestEncodeProperty(t *testing.T) {
 				key string
 				val interface{}
 			}{"k", 1.1},
-			want: bytes.NewBufferString("k=1.1\n"),
+			want: bytes.NewBufferString("k = 1.1\n"),
 		},
 		{
 			desc: "encode uint",
@@ -59,7 +59,7 @@ func TestEncodeProperty(t *testing.T) {
 				key string
 				val interface{}
 			}{"k", uint(1)},
-			want: bytes.NewBufferString("k=1\n"),
+			want: bytes.NewBufferString("k = 1\n"),
 		},
 		{
 			desc: "encode bool",
@@ -67,7 +67,7 @@ func TestEncodeProperty(t *testing.T) {
 				key string
 				val interface{}
 			}{"k", true},
-			want: bytes.NewBufferString("k=true\n"),
+			want: bytes.NewBufferString("k = true\n"),
 		},
 		{
 			desc: "encode slice",
@@ -75,7 +75,7 @@ func TestEncodeProperty(t *testing.T) {
 				key string
 				val interface{}
 			}{"k", []string{"a", "b"}},
-			want: bytes.NewBufferString("k=a\nk=b\n"),
+			want: bytes.NewBufferString("k = a\nk = b\n"),
 		},
 		{
 			desc: "encode map",
@@ -83,7 +83,7 @@ func TestEncodeProperty(t *testing.T) {
 				key string
 				val interface{}
 			}{"k", map[string]string{"a": "a", "b": "b"}},
-			want: bytes.NewBufferString("k[a]=a\nk[b]=b\n"),
+			want: bytes.NewBufferString("k[a] = a\nk[b] = b\n"),
 		},
 		{
 			desc: "encode error map struct",
@@ -121,7 +121,7 @@ func TestEncodeProperty(t *testing.T) {
 				key string
 				val interface{}
 			}{"k", point{1, 3}},
-			want: bytes.NewBufferString("k=(1,3)\n"),
+			want: bytes.NewBufferString("k = (1,3)\n"),
 		},
 	}
 
@@ -177,7 +177,7 @@ func TestEncodeSection(t *testing.T) {
 				Z int `ini:",omitempty"`
 				N int `ini:"N"`
 			}{0, 1}},
-			want: bytes.NewBufferString("[s]\nN=1\n\n"),
+			want: bytes.NewBufferString("[s]\nN = 1\n\n"),
 		},
 		{
 			desc: "encode error non-struct",
@@ -244,7 +244,7 @@ func TestEncode(t *testing.T) {
 				Z int `ini:",omitempty"`
 				N int
 			}{0, 1},
-			want: bytes.NewBufferString("N=1\n\n"),
+			want: bytes.NewBufferString("N = 1\n\n"),
 		},
 		{
 			desc:        "encode error property",

@@ -229,7 +229,7 @@ func encodeProperty(buf *bytes.Buffer, key string, rv reflect.Value) error {
 	}
 	if len(data) > 0 {
 		buf.WriteString(key)
-		buf.WriteRune('=')
+		buf.WriteString(" = ")
 		buf.Write(data)
 		buf.WriteRune('\n')
 	}
