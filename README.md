@@ -1,7 +1,7 @@
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/subpop/go-ini)](https://pkg.go.dev/github.com/subpop/go-ini)
 [![Go Report Card](https://goreportcard.com/badge/github.com/subpop/go-ini)](https://goreportcard.com/report/github.com/subpop/go-ini)
 
-# go-ini
+# ini
 
 A Go package that encodes and decodes INI-files.
 
