@@ -1,5 +1,4 @@
-[![PkgGoDev](https://pkg.go.dev/badge/github.com/subpop/go-ini)](https://pkg.go.dev/github.com/subpop/go-ini)
-[![Go Report Card](https://goreportcard.com/badge/github.com/subpop/go-ini)](https://goreportcard.com/report/github.com/subpop/go-ini)
+[![PkgGoDev](https://pkg.go.dev/badge/github.com/mbsulliv/ini)](https://pkg.go.dev/github.com/mbsulliv/ini)
 
 # ini
 
