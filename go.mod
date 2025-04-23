@@ -1,4 +1,4 @@
-module github.com/subpop/go-ini
+module github.com/mbsulliv/ini
 
 go 1.21
 
