@@ -108,43 +108,63 @@ func encode(buf *bytes.Buffer, rv reflect.Value) error {
 		return &MarshalTypeError{typ: rv.Type()}
 	}
 
-	// first pass, skipping structs
+	// Is this a named struct (i.e. ININame)?
+	vStructName := ""
 	for i := 0; i < rv.NumField(); i++ {
 		sf := rv.Type().Field(i)
 		sv := rv.Field(i)
-		t := newTag(sf)
-
-		if t.name == "-" || sf.Type.Kind() == reflect.Struct {
-			continue
-		}
-
-		if t.omitempty && sv.Interface() == reflect.Zero(sv.Type()).Interface() {
-			continue
-		}
-
-		if err := encodeProperty(buf, t.name, sv); err != nil {
-			return err
+		if sf.Name == "ININame" {
+			vStructName = sv.String()
+			break
 		}
 	}
 
-	buf.WriteRune('\n')
-
-	// second pass, only structs
-	for i := 0; i < rv.NumField(); i++ {
-		sf := rv.Type().Field(i)
-		sv := rv.Field(i)
-		t := newTag(sf)
-
-		if t.name == "-" || sf.Type.Kind() != reflect.Struct {
-			continue
-		}
-
-		if t.omitempty && sv.Interface() == reflect.Zero(sv.Type()).Interface() {
-			continue
-		}
-
-		if err := encodeSection(buf, t.name, sv); err != nil {
+	// If we're a named struct, treat the whole struct as a section.
+	// Otherwise, use the two pass approach: global properties and then
+	// sections.
+	if vStructName != "" {
+		if err := encodeSection(buf, vStructName, rv); err != nil {
 			return err
+		}
+	} else {
+		// first pass, skipping structs
+		for i := 0; i < rv.NumField(); i++ {
+			sf := rv.Type().Field(i)
+			sv := rv.Field(i)
+			t := newTag(sf)
+
+			if t.name == "-" || sf.Type.Kind() == reflect.Struct {
+				continue
+			}
+
+			if t.omitempty && sv.Interface() == reflect.Zero(sv.Type()).Interface() {
+				continue
+			}
+
+			if err := encodeProperty(buf, t.name, sv); err != nil {
+				return err
+			}
+		}
+
+		buf.WriteRune('\n')
+
+		// second pass, only structs
+		for i := 0; i < rv.NumField(); i++ {
+			sf := rv.Type().Field(i)
+			sv := rv.Field(i)
+			t := newTag(sf)
+
+			if t.name == "-" || sf.Type.Kind() != reflect.Struct {
+				continue
+			}
+
+			if t.omitempty && sv.Interface() == reflect.Zero(sv.Type()).Interface() {
+				continue
+			}
+
+			if err := encodeSection(buf, t.name, sv); err != nil {
+				return err
+			}
 		}
 	}
 
@@ -163,7 +183,7 @@ func encodeSection(buf *bytes.Buffer, key string, rv reflect.Value) error {
 		sv := rv.Field(i)
 		t := newTag(sf)
 
-		if t.name == "-" {
+		if (t.name == "-") || (t.name == "ININame") {
 			continue
 		}
 
@@ -227,6 +247,7 @@ func encodeProperty(buf *bytes.Buffer, key string, rv reflect.Value) error {
 		}
 
 	}
+
 	if len(data) > 0 {
 		buf.WriteString(key)
 		buf.WriteString(" = ")
